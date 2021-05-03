@@ -39,8 +39,10 @@ class TaskRepository extends ServiceEntityRepository
     {
         /** @var string|null $title */
         $title = $createTaskForm->getTitle();
+        /** @var Status $statusActive */
+        $statusActive = $this->_em->getReference(Status::class, Status::STATUS['active']);
         /** @var Task $task */
-        $task = $this->findOneBy(['title' => $title]);
+        $task = $this->findOneBy(['title' => $title, 'statusId' => $statusActive]);
 
         if ($task instanceof Task) {
             $task->setTitle($title)
