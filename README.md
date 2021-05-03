@@ -17,6 +17,6 @@ A simple symfony 4.4 project to manage task
 # Future Update
 1) Edit task
 2) Check Task starting date is greater than now and task finishing date is not older than task starting date
-3) Sending email reminder for any upcoming task
+3) Sending email reminder for any upcoming task (need to modify FE to ask user user when he/she wants the reminder to be sent)
 4) Write unit test and API test
 
