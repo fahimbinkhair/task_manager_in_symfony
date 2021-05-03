@@ -1,0 +1,74 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ taskType }} Task{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            let taskType = '{{ taskType }}'
+
+            deleteTask = function (id) {
+                $.ajax({
+                    url: "/delete-task/"+id,
+                    context: document.body
+                }).done(function() {
+                    $('#taskManagerTable').DataTable().ajax.reload();
+                    alert('Task has been deleted successfully');
+                }).fail(function () {
+                    alert('Can not delete the task, please try again later');
+                })
+            };
+
+            $('#taskManagerTable').DataTable({
+                "ajax": {
+                    "url": '/get-task/' + taskType,
+                    "type": "GET",
+                    "datatype": 'json',
+                },
+                columnDefs: [
+                    {targets: 0, data: "title"},
+                    {targets: 1, data: "description"},
+                    {targets: 2, data: "taskTime"},
+                    {
+                        "render": function (data, type, row) {
+                            let action = '';
+
+                            if (row['taskAction'] === 'upcoming') {
+                                action = '<a href="/edit-task/' + row['id'] + '">Edit</a> | ';
+                            }
+
+                            action += '<a href="#" data-id="3" onclick="deleteTask(' + row['id'] + ')">Delete</a>';
+
+                            return action;
+                        },
+                        "targets": 3,
+                        'orderable': false
+                    },
+                    // { targets: 3, data: "taskAction", 'orderable': false }
+                ],
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                "pageLength": 2
+            });
+        });
+    </script>
+
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+{% block pageTitle %}{{ taskType|capitalize }} Task{% endblock %}
+
+{% block body %}
+    <table id="taskManagerTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Time</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+    </table>
+    <span id="sss"></span>
+{% endblock %}

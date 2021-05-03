@@ -1,0 +1,57 @@
+{% extends "base.html.twig" %}
+{% block title %}Create Task{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $('#saveTask').click(function () {
+                let data = {
+                    title: $('#title').val(),
+                    description: $('#description').val(),
+                    startFrom: $('#startFrom').val(),
+                    finishAt: $('#finishAt').val()
+                };
+
+                $.post("{{ route }}", data)
+                    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Can not save task');
+                    })
+                    .done(function (data) {
+                        alert('Task has been saved successfully');
+                    });
+            });
+        });
+    </script>
+{% endblock %}
+{% block pageTitle %}Create Task{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <label for="title">Title</label>
+            <input type="text" id="title" class="form-control" placeholder="Task Title">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <label for="description">Description</label>
+            <input type="text" id="description" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <label for="startFrom">Start Time</label>
+            <input type="datetime-local" id="startFrom" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <label for="finishAt">Finish At</label>
+            <input type="datetime-local" id="finishAt" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <input type="button" id="saveTask" value="Save Task" class="btn btn-primary">
+        </div>
+    </div>
+{% endblock %}
